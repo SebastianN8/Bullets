@@ -15,8 +15,8 @@ physics.setGravity(0, 25)
 local theBullets = {} -- This is the table created
 
 -- Left barrier
-local leftBarrier = display.newRect(0, display.contentHeight / 2, 1, display.contentHeight)
-leftBarrier.id = 'The left Barrier'
+--local leftBarrier = display.newRect(0, display.contentHeight / 2, 1, display.contentHeight)
+--leftBarrier.id = 'The left Barrier'
 --physics.addBody(leftBarrier, 'static', {
 --	friction = 0.5,
 --	bounce = 0.3
@@ -195,20 +195,20 @@ local function jumpingSnow(event)
 end
 
 -- Collision function
-local function collisionControl(self, event)
-	if (event.phase == 'began') then
-		print(self.id.. ' is on collision with '..event.other.id)
-	elseif (event.phase == 'ended') then
-		print(self.id.. ' ended collision with '..event.other.id)
-	end
-end
+--local function collisionControl(self, event)
+--	if (event.phase == 'began') then
+--		print(self.id.. ' is on collision with '..event.other.id)
+--	elseif (event.phase == 'ended') then
+--		print(self.id.. ' ended collision with '..event.other.id)
+--	end
+--end
 
 -- Shoot function 
 function shootButton:touch(event)
 	if (event.phase == 'began') then
 		-- Creating the bullet in screen
 		local singleBullet = display.newImage('./Assets/Sprites/Kunai.png')
-		singleBullet.x = theSnowMan.x
+		singleBullet.x = theSnowMan.x + 250
 		singleBullet.y = theSnowMan.y
 		singleBullet.id = 'The bullet'
 		physics.addBody(singleBullet, 'dynamic')
@@ -234,7 +234,7 @@ local function checkBulletsOutBounds(event)
 				theBullets[bulletCounter]:removeSelf()
 				theBullets[bulletCounter] = nil
 				table.remove(theBullets, bulletCounter)
-				print('# of bullet removed: '.. tostring(bulletCounter))
+				print('# of bullet left: '.. tostring(#theBullets))
 			end
 		end
 	end
@@ -250,11 +250,16 @@ rightArrow:addEventListener('touch', rightArrow)
 Runtime:addEventListener('enterFrame', falllingSnow)
 jumpButton:addEventListener('touch', jumpingSnow)
 --Runtime:addEventListener('enterFrame', fallingLand)
-shootButton:addEventListener('touch', shootButton) -- Event listener forthe shoot button
+
+-- Event listener for the bullets
+shootButton:addEventListener('touch', shootButton)
+Runtime:addEventListener('enterFrame', checkBulletsOutBounds)
 
 -- Event listener for collision
-theSnowMan.collision = collisionControl
-theSnowMan:addEventListener('collision')
-theLandSquare.collision = collisionControl
-theLandSquare:addEventListener('collision')
-Runtime:addEventListener('enterFrame', checkBulletsOutBounds)
+--theSnowMan.collision = collisionControl
+--theSnowMan:addEventListener('collision')
+--theLandSquare.collision = collisionControl
+--theLandSquare:addEventListener('collision')
+
+
+
